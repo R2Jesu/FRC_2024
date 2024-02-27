@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
-
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +20,10 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class Robot extends TimedRobot {
   R2Jesu_Drive robotDrive = new R2Jesu_Drive();
+  R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
+  R2Jesu_Align robotAlign = new R2Jesu_Align();
+  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
+  AHRS ahrs = new AHRS(SPI.Port.kMXP);
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -48,7 +53,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    robotLimelight.postDashboard();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -88,7 +95,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
+    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX(), ahrs);
+    robotShooter.runShooter(m_Drivestick);
   }
 
   /** This function is called once when the robot is disabled. */
