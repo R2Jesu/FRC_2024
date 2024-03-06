@@ -19,10 +19,7 @@ import edu.wpi.first.wpilibj.SPI;
  * project.
  */
 public class Robot extends TimedRobot {
-  R2Jesu_Drive robotDrive = new R2Jesu_Drive();
-  R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
-  R2Jesu_Align robotAlign = new R2Jesu_Align();
-  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
+
   AHRS ahrs = new AHRS(SPI.Port.kMXP);
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -31,6 +28,12 @@ public class Robot extends TimedRobot {
   // defining drive here
   private final XboxController m_Drivestick = new XboxController(0);
   //private final XboxController m_Operatorstick = new XboxController(1);
+  R2Jesu_Drive robotDrive = new R2Jesu_Drive(ahrs);
+  R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
+  R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
+  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
+  // UNCOMMENT OUT SHOOTER
+  //R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
   
 
   /**
@@ -84,6 +87,8 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
+        robotShooter.shoot();
+        robotDrive.driveAuto();
         break;
     }
   }
@@ -95,7 +100,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX(), ahrs);
+    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
     robotShooter.runShooter(m_Drivestick);
   }
 

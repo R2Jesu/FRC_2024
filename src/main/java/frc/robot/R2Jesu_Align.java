@@ -23,6 +23,9 @@ public class R2Jesu_Align {
     private PIDController m_aTurn2Controller = new PIDController(aTurn2Ppid, aTurn2Ipid, aTurn2Dpid, 0.02);
     //NavX
     //AHRS *ahrs;
+    R2Jesu_Drive alignDrive;
+    R2Jesu_Limelight alignLimelight;
+    AHRS alignAhrs;
     
 
     //Align
@@ -33,7 +36,13 @@ public class R2Jesu_Align {
     double aprilCorrection;
     double aprilID = 0.0;
 
-    public boolean align(double targetYaw, R2Jesu_Drive alignDrive, R2Jesu_Limelight alignLimelight, AHRS alignAhrs) {
+    public R2Jesu_Align(R2Jesu_Drive x, R2Jesu_Limelight y, AHRS z) {
+        alignDrive = x;
+        alignLimelight = y;
+        alignAhrs = z;
+    }
+
+    public boolean align(double targetYaw) {
         localAlign = true;
     aprilCorrection = 0.0;
     aTurn2PidOutput = 0.0;
@@ -47,7 +56,7 @@ public class R2Jesu_Align {
             aTurn2PidOutput = aTurn2PidOutput * -1.0;
         }
         localAlign = false;
-        alignDrive.drive(0.0, 0.0, aTurn2PidOutput, alignAhrs);
+        alignDrive.drive(0.0, 0.0, aTurn2PidOutput);
     }
     //if (((limelight_Table->GetNumber("tx",0.0) < -1.5) || (limelight_Table->GetNumber("tx",0.0) > 1.5)) && !((ahrs->GetYaw() > -177.0) && (ahrs->GetYaw() < 177.0)))
     if (((alignLimelight.getTX() < -1.5) || (alignLimelight.getTX() > 1.5)) && !(Math.abs(alignAhrs.getYaw()) < (targetYaw - 3) || Math.abs(alignAhrs.getYaw()) > (targetYaw + 3)))
@@ -56,10 +65,10 @@ public class R2Jesu_Align {
         aprilCorrection = m_alignController.calculate(aprilError, 0.0);
         localAlign = false;
         if (targetYaw == 0.0) {
-            alignDrive.drive((aprilCorrection * -1.0), 0.0, 0.0, alignAhrs);
+            alignDrive.drive((aprilCorrection * -1.0), 0.0, 0.0);
         }
         else {
-            alignDrive.drive(aprilCorrection, 0.0, 0.0, alignAhrs);
+            alignDrive.drive(aprilCorrection, 0.0, 0.0);
         }
     }
     return localAlign;
