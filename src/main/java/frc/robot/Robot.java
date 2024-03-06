@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
-
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,7 +19,8 @@ import edu.wpi.first.wpilibj.XboxController;
  * project.
  */
 public class Robot extends TimedRobot {
-  R2Jesu_Drive robotDrive = new R2Jesu_Drive();
+
+  AHRS ahrs = new AHRS(SPI.Port.kMXP);
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -26,6 +28,12 @@ public class Robot extends TimedRobot {
   // defining drive here
   private final XboxController m_Drivestick = new XboxController(0);
   //private final XboxController m_Operatorstick = new XboxController(1);
+  R2Jesu_Drive robotDrive = new R2Jesu_Drive(ahrs);
+  R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
+  R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
+  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
+  // UNCOMMENT OUT SHOOTER
+  //R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
   
 
   /**
@@ -48,7 +56,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    robotLimelight.postDashboard();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -77,6 +87,8 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
+        robotShooter.shoot();
+        robotDrive.driveAuto();
         break;
     }
   }
@@ -89,6 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
+    robotShooter.runShooter(m_Drivestick);
   }
 
   /** This function is called once when the robot is disabled. */
