@@ -15,22 +15,28 @@ public class R2Jesu_Shooter {
      private CANSparkMax intakeGreenMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
      private DigitalInput digitalSensor = new DigitalInput(0);
      
-     
+     public R2Jesu_Shooter () {
+        intakeMotor.set(0.0);
+        intakeGreenMotor.set(0.0);
+        indexerMotor.set(0.0);
+        topMotor.set(0.0);
+        bottomMotor.set(0.0);
+     }
      
      public void runShooter(XboxController shooterController) {
         SmartDashboard.putBoolean("Sensor Input", digitalSensor.get());
     // if for photo cell and intake
     //if (!(m_Drivestick.getAButton()) && !(m_Drivestick.getBButton())) {
     if (!(digitalSensor.get()) && !(shooterController.getBButton())) {
-        intakeMotor.set(0.40);
-        intakeGreenMotor.set(.40);
+        intakeMotor.set(0.30);
+        intakeGreenMotor.set(.30);
         indexerMotor.set(0.30);
         topMotor.set(0.0);
         bottomMotor.set(0.0);
     }
     else {
-        topMotor.set(0.95);
-        bottomMotor.set(0.95);
+        topMotor.set(0.75);
+        bottomMotor.set(0.75);
         intakeMotor.set(0.0);
         intakeGreenMotor.set(0.0);
         if (shooterController.getBButton() && true) { // change to motor speed check
@@ -43,8 +49,8 @@ public class R2Jesu_Shooter {
 }
 
     public void shoot() {
-        topMotor.set(0.95);
-        bottomMotor.set(0.95);
+        topMotor.set(0.75);
+        bottomMotor.set(0.75);
         intakeMotor.set(0.0);
         intakeGreenMotor.set(0.0);
         if (true) { // change to motor speed check

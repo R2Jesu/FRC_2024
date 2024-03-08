@@ -29,13 +29,13 @@ public class R2Jesu_Drive {
   // swerve 3
   private CANSparkMax m_SwerveDrive3 = new CANSparkMax(7, MotorType.kBrushless);
   private RelativeEncoder m_DriveEncoder3 = m_SwerveDrive3.getEncoder();
-  private WPI_TalonSRX m_SwerveTurn3 = new WPI_TalonSRX(3);
+  private WPI_VictorSPX m_SwerveTurn3 = new WPI_VictorSPX(3);
   private AnalogInput m_SwerveAnalog3 = new AnalogInput(2);
 
   // swerve 4
   private CANSparkMax m_SwerveDrive4 = new CANSparkMax(8, MotorType.kBrushless);
   private RelativeEncoder m_DriveEncoder4 = m_SwerveDrive4.getEncoder();
-  private WPI_TalonSRX m_SwerveTurn4 = new WPI_TalonSRX(4);
+  private WPI_VictorSPX m_SwerveTurn4 = new WPI_VictorSPX(4);
   private AnalogInput m_SwerveAnalog4 = new AnalogInput(3);
 
   private double inputAngle = 0.0;
@@ -47,8 +47,8 @@ public class R2Jesu_Drive {
   private double B = 0.0;
   private double C = 0.0;
   private double D = 0.0;
-  private double LENGTH = 17.375;
-  private double WIDTH = 21.25;
+  private double LENGTH = 21.50;
+  private double WIDTH = 18.00;
   private double R = Math.sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
   private double fullSpeed = .3;
   private double turnSpeed = .2;
@@ -256,6 +256,6 @@ SmartDashboard.putNumber("Wheel 4 Speed", wSpeed4);
     m_DriveEncoder4.setPosition(0.0);
 
   }
-  }
+}
 
 

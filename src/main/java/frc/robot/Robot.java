@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
   R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
   // UNCOMMENT OUT SHOOTER
-  //R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
+  R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
   
 
   /**
@@ -102,6 +102,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
     robotShooter.runShooter(m_Drivestick);
+    //robotHanger.hang(m_Drivestick);
   }
 
   /** This function is called once when the robot is disabled. */
