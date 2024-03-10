@@ -30,7 +30,7 @@ public class R2Jesu_Shooter {
     if (!(digitalSensor.get()) && !(shooterController.getBButton())) {
         intakeMotor.set(0.30);
         intakeGreenMotor.set(.30);
-        indexerMotor.set(0.30);
+        indexerMotor.set(0.2);
         topMotor.set(0.0);
         bottomMotor.set(0.0);
     }

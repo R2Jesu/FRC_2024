@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -50,8 +49,8 @@ public class R2Jesu_Drive {
   private double LENGTH = 21.50;
   private double WIDTH = 18.00;
   private double R = Math.sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
-  private double fullSpeed = .3;
-  private double turnSpeed = .2;
+  private double fullSpeed = .8;
+  private double turnSpeed = .4;
   private double speedChoice;
   private double wSpeed1=0.0;
   private double wAngle1=0.0;
@@ -84,8 +83,15 @@ public class R2Jesu_Drive {
   }
 
 
-  public void drive(double x, double y, double z) {
+  public void drive(double x, double y, double z, boolean useFull) {
     y = y * -1.0;
+
+    if (useFull) {
+        fullSpeed = 0.8;
+    }
+    else {
+        fullSpeed = 0.4;
+    }
     
     if (Math.abs(x) < 0.1)
     {
@@ -118,7 +124,7 @@ public class R2Jesu_Drive {
         speedChoice = fullSpeed;
     }
 
-    wSpeed1 = speedChoice *  (Math.sqrt(B*B + C*C));
+    wSpeed1 = speedChoice * (Math.sqrt(B*B + C*C));
 	wAngle1 = Math.atan2(B,C) * 180.0/Math.PI; 
     if (wAngle1 < 0.0)
     {

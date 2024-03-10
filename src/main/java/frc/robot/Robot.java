@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private boolean useFull;
   // defining drive here
   private final XboxController m_Drivestick = new XboxController(0);
   //private final XboxController m_Operatorstick = new XboxController(1);
@@ -32,8 +33,7 @@ public class Robot extends TimedRobot {
   R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
   R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
   R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
-  // UNCOMMENT OUT SHOOTER
-  R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
+  //R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
   
 
   /**
@@ -100,7 +100,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
+    if (m_Drivestick.getLeftTriggerAxis() > 0.0) {
+      useFull = false;
+    }
+    else {
+      useFull = true;
+    }
+    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX(), useFull);
     robotShooter.runShooter(m_Drivestick);
     //robotHanger.hang(m_Drivestick);
   }

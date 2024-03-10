@@ -56,7 +56,7 @@ public class R2Jesu_Align {
             aTurn2PidOutput = aTurn2PidOutput * -1.0;
         }
         localAlign = false;
-        alignDrive.drive(0.0, 0.0, aTurn2PidOutput);
+        alignDrive.drive(0.0, 0.0, aTurn2PidOutput, true);
     }
     //if (((limelight_Table->GetNumber("tx",0.0) < -1.5) || (limelight_Table->GetNumber("tx",0.0) > 1.5)) && !((ahrs->GetYaw() > -177.0) && (ahrs->GetYaw() < 177.0)))
     if (((alignLimelight.getTX() < -1.5) || (alignLimelight.getTX() > 1.5)) && !(Math.abs(alignAhrs.getYaw()) < (targetYaw - 3) || Math.abs(alignAhrs.getYaw()) > (targetYaw + 3)))
@@ -65,10 +65,10 @@ public class R2Jesu_Align {
         aprilCorrection = m_alignController.calculate(aprilError, 0.0);
         localAlign = false;
         if (targetYaw == 0.0) {
-            alignDrive.drive((aprilCorrection * -1.0), 0.0, 0.0);
+            alignDrive.drive((aprilCorrection * -1.0), 0.0, 0.0, true);
         }
         else {
-            alignDrive.drive(aprilCorrection, 0.0, 0.0);
+            alignDrive.drive(aprilCorrection, 0.0, 0.0, true);
         }
     }
     return localAlign;
