@@ -129,7 +129,9 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
+          robotShooter.runShooter(m_Drivestick);
           while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 12 && DriverStation.isAutonomousEnabled());
+          robotDrive.drive(0.0, 0.0, 0.0, false);
           robotShooter.shoot();
           try {
             Thread.sleep(1000);
@@ -138,7 +140,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 48 && DriverStation.isAutonomousEnabled()) {
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 55 && DriverStation.isAutonomousEnabled()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.driveAuto(0.0, 0.0, 0.0);
@@ -150,7 +152,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, 0.25, 0.0) < 30 && DriverStation.isAutonomousEnabled());
+          while (robotDrive.driveAuto(0.0, 0.25, 0.0) < 37 && DriverStation.isAutonomousEnabled());
           robotDrive.drive(0.0, 0.0, 0.0, false);
           robotShooter.shoot();
           try {
@@ -205,9 +207,17 @@ public class Robot extends TimedRobot {
         if (runAuto) {
           robotDrive.zeroPosition();
           double autoAngle = robotDrive.getAngle();
+          if (autoAngle < 0)
+          {
+            autoAngle -= 10;
+          }
+          else
+          {
+            autoAngle += 10;
+          }
           robotShooter.justShooter();
           try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
           }
           catch (InterruptedException e)
           {
@@ -215,7 +225,7 @@ public class Robot extends TimedRobot {
           }
           robotShooter.shoot();
           try {
-            Thread.sleep(1000);
+            Thread.sleep(800);
           }
           catch (InterruptedException e)
           {
@@ -230,7 +240,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.35, 0.0) < 60 && DriverStation.isAutonomousEnabled()) {
+          while (robotDrive.driveAuto(0.0, -0.45, 0.0) < 60 && DriverStation.isAutonomousEnabled()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
@@ -244,7 +254,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, 0.35, 0.0) < 62 && DriverStation.isAutonomousEnabled());
+          while (robotDrive.driveAuto(0.0, 0.45, 0.0) < 58 && DriverStation.isAutonomousEnabled());
           try {
             Thread.sleep(200);
           }

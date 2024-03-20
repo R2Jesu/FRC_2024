@@ -83,7 +83,7 @@ public class R2Jesu_Shooter {
             indexerMotor.set(0.10);
         }
 
-            if (shooterController.getXButton()) { // change to motor speed check
+        if (shooterController.getXButton()) { // change to motor speed check
             topMotor.set(0.0);
             bottomMotor.set(0.0);
             intakeMotor.set(-0.20);

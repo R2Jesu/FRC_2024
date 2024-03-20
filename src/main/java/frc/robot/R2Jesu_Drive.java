@@ -54,8 +54,8 @@ public class R2Jesu_Drive {
   private double LENGTH = 21.50;
   private double WIDTH = 18.00;
   private double R = Math.sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
-  private double fullSpeed = .3;
-  private double turnSpeed = .15;
+  private double fullSpeed = 0.3;
+  private double turnSpeed = 0.25;
   private double speedChoice;
   private double wSpeed1=0.0;
   private double wAngle1=0.0;
@@ -248,14 +248,14 @@ else
     dX=x;
     dY=y;
     dZ=z;
-    this.drive(x, y, (ahrsDrive.getYaw() - 0.0) * -0.05, false);
+    this.drive(x, y, (ahrsDrive.getYaw() - 0.0) * -0.06, false);
     this.driveMetrics();
     return Math.abs(m_DriveEncoder1.getPosition());
   }
 
   public boolean turnToAngle(double angle)
   {
-    this.drive(0, 0, (ahrsDrive.getYaw() - angle) * -0.03, false);
+    this.drive(0, 0, (ahrsDrive.getYaw() - angle) * -0.028, false);
     if ((ahrsDrive.getYaw() < angle + 3) && (ahrsDrive.getYaw() > angle - 3))
     {
         return true;
