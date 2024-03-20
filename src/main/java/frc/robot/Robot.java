@@ -11,6 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,17 +23,21 @@ public class Robot extends TimedRobot {
 
   AHRS ahrs = new AHRS(SPI.Port.kMXP);
   private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+  private static final String kShootLeaveAuto = "Shoot leave";
+  private static final String kShootLeaveShootAuto = "Shoot leave shoot";
+  private static final String kShootLeaveOffCenterAuto = "Shoot leave off center";
+  private static final String kShootLeaveShootOffCenterAuto = "Shoot leave shoot off center";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private boolean useFull;
+  private boolean runAuto;
   // defining drive here
   private final XboxController m_Drivestick = new XboxController(0);
   //private final XboxController m_Operatorstick = new XboxController(1);
   R2Jesu_Drive robotDrive = new R2Jesu_Drive(ahrs);
   R2Jesu_Limelight robotLimelight = new R2Jesu_Limelight();
   R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
-  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter();
-  // UNCOMMENT OUT SHOOTER
+  R2Jesu_Shooter robotShooter = new R2Jesu_Shooter(robotLimelight);
   R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
   
 
@@ -44,7 +49,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Shoot leave", kShootLeaveAuto);
+    m_chooser.addOption("Shoot leave shoot", kShootLeaveShootAuto);
+    m_chooser.addOption("Shoot leave off center", kShootLeaveOffCenterAuto);
+    m_chooser.addOption("Shoot leave shoot off center", kShootLeaveShootOffCenterAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
@@ -58,6 +66,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     robotLimelight.postDashboard();
+    robotDrive.driveMetrics();
+    robotLimelight.getDistance();
   }
 
   /**
@@ -75,34 +85,232 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    runAuto = true;
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
+      case kShootLeaveAuto:
+        if (runAuto) {
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 12 && DriverStation.isAutonomousEnabled());
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.shoot();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 48 && DriverStation.isAutonomousEnabled()) {
+              robotShooter.runShooter(m_Drivestick);
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          runAuto = false;
+        }
+        break;
+      case kShootLeaveShootAuto:
+        if (runAuto) {
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotShooter.runShooter(m_Drivestick);
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 12 && DriverStation.isAutonomousEnabled());
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.shoot();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 55 && DriverStation.isAutonomousEnabled()) {
+              robotShooter.runShooter(m_Drivestick);
+          }
+          robotDrive.driveAuto(0.0, 0.0, 0.0);
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, 0.25, 0.0) < 37 && DriverStation.isAutonomousEnabled());
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.shoot();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotDrive.zeroPosition();
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          runAuto = false;
+        }
+        break;
+      case kShootLeaveOffCenterAuto:
+        if (runAuto) {
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.shoot();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (!(robotDrive.turnToAngle(0.0)));
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, -0.25, 0.0) < 60 && DriverStation.isAutonomousEnabled()) {
+              robotShooter.runShooter(m_Drivestick);
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          runAuto = false;
+        }
+        break;
+
+        case kShootLeaveShootOffCenterAuto:
+        if (runAuto) {
+          robotDrive.zeroPosition();
+          double autoAngle = robotDrive.getAngle();
+          if (autoAngle < 0)
+          {
+            autoAngle -= 10;
+          }
+          else
+          {
+            autoAngle += 10;
+          }
+          robotShooter.justShooter();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotShooter.shoot();
+          try {
+            Thread.sleep(800);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (!(robotDrive.turnToAngle(0.0)));
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, -0.45, 0.0) < 60 && DriverStation.isAutonomousEnabled()) {
+              robotShooter.runShooter(m_Drivestick);
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.runShooter(m_Drivestick);
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotDrive.zeroPosition();
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (robotDrive.driveAuto(0.0, 0.45, 0.0) < 58 && DriverStation.isAutonomousEnabled());
+          try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          while (!(robotDrive.turnToAngle(autoAngle)));
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.justShooter();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotShooter.shoot();
+          runAuto = false;
+        }
         break;
       case kDefaultAuto:
       default:
         // Put default auto code here
-        robotShooter.shoot();
-        robotDrive.driveAuto();
         break;
     }
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    robotDrive.drive(0, 0, 0, false);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX());
+    SmartDashboard.putNumber("Full?", m_Drivestick.getLeftTriggerAxis());
+    if (m_Drivestick.getLeftTriggerAxis() <= 0.0) {
+      useFull = false;
+    }
+    else {
+      useFull = true;
+    }
+
+    robotDrive.drive(m_Drivestick.getRightX(), m_Drivestick.getRightY(), m_Drivestick.getLeftX(), this.useFull);
     robotShooter.runShooter(m_Drivestick);
-    //robotHanger.hang(m_Drivestick);
+    robotHanger.hang(m_Drivestick);
   }
 
   /** This function is called once when the robot is disabled. */
