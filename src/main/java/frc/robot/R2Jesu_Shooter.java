@@ -32,6 +32,7 @@ public class R2Jesu_Shooter {
      }
      
      public void runShooter(XboxController shooterController) {
+        //System.out.println("RunShooter");
         SmartDashboard.putBoolean("Sensor Input", digitalSensor.get());
     // if for photo cell and intake
     //if (!(m_Drivestick.getAButton()) && !(m_Drivestick.getBButton())) {
@@ -49,14 +50,14 @@ public class R2Jesu_Shooter {
             if (theDist == 0.0) {
                 shootIt =.95;
             }
-            else if (theDist <= 75.0) {
+            else if (theDist <= 60.0) {
                 shootIt =.90;
             }
             else if (theDist <= 80.0) {
-                shootIt = .62;
+                shootIt = .55;
             }
             else {
-                shootIt = .58;
+                shootIt = .50;
             }
             //shootIt=SmartDashboard.getNumber("Set It", 0.0);//Take out ater for variation
             //shootIt=.575;//Take out ater for variation

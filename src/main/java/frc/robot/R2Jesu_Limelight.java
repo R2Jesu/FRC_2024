@@ -30,7 +30,7 @@ public class R2Jesu_Limelight {
     public double getDistance() {
         //(Target height - camera height) / tan((camera angle + target offset angle from limelight)) * (PI / 180)))
         targetOffsetAngle_Vertical = limelight_Table.getEntry("ty").getDouble(0.0);
-        ourDist = (((double)57.5 - (double)23.125) / (Math.tan(((double)17.57 + targetOffsetAngle_Vertical) * (Math.PI / 180.00))));
+        ourDist = (((double)57.5 - (double)23.125) / (Math.tan(((double)23.12 + targetOffsetAngle_Vertical) * (Math.PI / 180.00))));
         currentDistance = ourDist;
         if (targetOffsetAngle_Vertical == 0.0){
             currentDistance = 0.0;

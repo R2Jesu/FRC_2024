@@ -54,7 +54,7 @@ public class R2Jesu_Drive {
   private double LENGTH = 21.50;
   private double WIDTH = 18.00;
   private double R = Math.sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
-  private double fullSpeed = 0.3;
+  private double fullSpeed = 0.2;
   private double turnSpeed = 0.25;
   private double speedChoice;
   private double wSpeed1=0.0;
@@ -82,10 +82,10 @@ public class R2Jesu_Drive {
   private double pidOutput2 = 0.0;
   private double pidOutput3 = 0.0;
   private double pidOutput4 = 0.0;
-  private PIDController m_angleController1 = new PIDController(Ppid1, Ipid1, Dpid1, 100.0);
-  private PIDController m_angleController2 = new PIDController(Ppid2, Ipid2, Dpid2, 100.0);
-  private PIDController m_angleController3 = new PIDController(Ppid3, Ipid3, Dpid3, 100.0);
-  private PIDController m_angleController4 = new PIDController(Ppid4, Ipid4, Dpid4, 100.0);
+  private PIDController m_angleController1 = new PIDController(Ppid1, Ipid1, Dpid1, 0.01);
+  private PIDController m_angleController2 = new PIDController(Ppid2, Ipid2, Dpid2, 0.01);
+  private PIDController m_angleController3 = new PIDController(Ppid3, Ipid3, Dpid3, 0.01);
+  private PIDController m_angleController4 = new PIDController(Ppid4, Ipid4, Dpid4, 0.01);
   private double conversion1 = 360.0/3.3;
   private double conversion2 = 360.0/3.3;
   private double conversion3 = 360.0/3.3;
@@ -115,7 +115,7 @@ public class R2Jesu_Drive {
         fullSpeed = 0.8;
     }
     else {
-        fullSpeed = 0.3;
+        fullSpeed = 0.2;
     }
     
     if (Math.abs(x) < 0.1)
@@ -148,9 +148,12 @@ public class R2Jesu_Drive {
     {
         speedChoice = fullSpeed;
     }
-
+    System.out.println("x " + x + " y " + y + " z " + z);
+    System.out.println("B " + B);
+    System.out.println("C " + C);
     wSpeed1 = speedChoice * (Math.sqrt(B*B + C*C));
 	wAngle1 = Math.atan2(B,C) * 180.0/Math.PI; 
+    System.out.println("wAngle1 " + wAngle1);
     if (wAngle1 < 15.0)
     {
         wAngle1 = wAngle1 + 180;
@@ -161,6 +164,7 @@ public class R2Jesu_Drive {
         wAngle1 = wAngle1 - 180.0;
         wSpeed1 = -1.0 * wSpeed1;
     }
+    System.out.println("wAngle1calculated " + wAngle1);
 
 	wSpeed2 = speedChoice *  (Math.sqrt(B*B + D*D));
 	wAngle2 = Math.atan2(B,D) * 180.0/Math.PI;
@@ -249,6 +253,19 @@ else
     dY=y;
     dZ=z;
     this.drive(x, y, (ahrsDrive.getYaw() - 0.0) * -0.06, false);
+    this.driveMetrics();
+    return Math.abs(m_DriveEncoder1.getPosition());
+  }
+
+  public double driveAutoOffCenter(double x, double y, double z) {
+    dX=x;
+    dY=y;
+    dZ=z;
+    if (ahrsDrive.getYaw() < 0)
+    {
+        x = x * -1.0;
+    }
+    this.drive(x, y, z, false);
     this.driveMetrics();
     return Math.abs(m_DriveEncoder1.getPosition());
   }
