@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.30, 0.0) < 60 && RobotState.isAutonomous()) {
+          while (robotDrive.driveAuto(0.0, -0.30, 0.0, 0.0) < 60 && RobotState.isAutonomous()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
@@ -138,13 +138,13 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.50, 0.0) < 72 && RobotState.isAutonomous())
+          while (robotDrive.driveAuto(0.0, -0.50, 0.0, 0.0) < 72 && RobotState.isAutonomous())
           {
             robotShooter.runShooter(m_Drivestick);
           };
            System.out.println("bye speaker");
           //robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0);
+          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           robotDrive.zeroPosition();
           try {
             Thread.sleep(200);
@@ -154,10 +154,10 @@ public class Robot extends TimedRobot {
             System.out.println("Sleep");
           }
           //System.out.println("drive 72");
-          while (robotDrive.driveAuto(0.0, 0.50, 0.0) < 72 && RobotState.isAutonomous());
+          while (robotDrive.driveAuto(0.0, 0.50, 0.0, 0.0) < 72 && RobotState.isAutonomous());
            System.out.println("hello speaker");
           //robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0);
+          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           robotShooter.shoot();
           try {
             Thread.sleep(1000);
@@ -203,7 +203,7 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.45, 0.0) < 75 && RobotState.isAutonomous()) {
+          while (robotDrive.driveAuto(0.0, -0.45, 0.0, 0.0) < 75 && RobotState.isAutonomous()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
@@ -252,7 +252,7 @@ public class Robot extends TimedRobot {
             System.out.println("Sleep");
           }
           //System.out.println("drive 65");
-          while (robotDrive.driveAuto(0.0, -0.50, 0.0) < 75 && RobotState.isAutonomous()) {
+          while (robotDrive.driveAuto(0.0, -0.50, 0.0, 0.0) < 75 && RobotState.isAutonomous()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
@@ -267,7 +267,7 @@ public class Robot extends TimedRobot {
             System.out.println("Sleep");
           }
           //System.out.println("drive 58");
-          while (robotDrive.driveAuto(0.0, 0.50, 0.0) < 72 && RobotState.isAutonomous());
+          while (robotDrive.driveAuto(0.0, 0.50, 0.0, 0.0) < 72 && RobotState.isAutonomous());
           try {
             Thread.sleep(200);
           }

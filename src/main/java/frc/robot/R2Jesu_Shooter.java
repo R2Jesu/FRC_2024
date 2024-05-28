@@ -51,10 +51,10 @@ public class R2Jesu_Shooter {
                 shootIt =.95;
             }
             else if (theDist <= 60.0) {
-                shootIt =.90;
+                shootIt =.85;
             }
             else if (theDist <= 80.0) {
-                shootIt = .55;
+                shootIt = .56;
             }
             else {
                 shootIt = .50;

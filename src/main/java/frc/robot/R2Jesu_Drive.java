@@ -54,7 +54,7 @@ public class R2Jesu_Drive {
   private double LENGTH = 21.50;
   private double WIDTH = 18.00;
   private double R = Math.sqrt((LENGTH*LENGTH) + (WIDTH*WIDTH));
-  private double fullSpeed = 0.2;
+  private double fullSpeed = 0.35;
   private double turnSpeed = 0.25;
   private double speedChoice;
   private double wSpeed1=0.0;
@@ -95,6 +95,7 @@ public class R2Jesu_Drive {
   private double dX = 0.0;
   private double dY = 0.0;
   private double dZ = 0.0;
+  private double dAngle = 0.0;
 
   public R2Jesu_Drive(AHRS x) {
     ahrsDrive = x;
@@ -115,7 +116,7 @@ public class R2Jesu_Drive {
         fullSpeed = 0.8;
     }
     else {
-        fullSpeed = 0.2;
+        fullSpeed = 0.35;
     }
     
     if (Math.abs(x) < 0.1)
@@ -134,6 +135,7 @@ public class R2Jesu_Drive {
     inputAngle = Math.atan2(y, x) * 180.0/Math.PI;
     r = Math.sqrt((x*x) + (y*y));
     fieldOrientedAngle = ahrsDrive.getYaw() + inputAngle;
+    System.out.println("Field Oriented Angle" + fieldOrientedAngle);
     newX = r * (Math.cos(fieldOrientedAngle * Math.PI/180.0));
     newY = r * (Math.sin(fieldOrientedAngle * Math.PI/180.0));
     A = newY - z*(LENGTH/R);
@@ -164,6 +166,11 @@ public class R2Jesu_Drive {
         wAngle1 = wAngle1 - 180.0;
         wSpeed1 = -1.0 * wSpeed1;
     }
+  /*       if (wAngle1 < 15.0)
+    {
+        wAngle1 = wAngle1 + 180;
+        wSpeed1 = -1.0 * wSpeed1;
+    } */
     System.out.println("wAngle1calculated " + wAngle1);
 
 	wSpeed2 = speedChoice *  (Math.sqrt(B*B + D*D));
@@ -178,7 +185,11 @@ public class R2Jesu_Drive {
         wAngle2 = wAngle2 - 180.0;
         wSpeed2 = -1.0 * wSpeed2;
     }
-
+    /* if (wAngle2 < 15.0)
+    {
+        wAngle2 = wAngle2 + 180.0;
+        wSpeed2 = wSpeed2 * -1.0;
+    } */
 	wSpeed3 = speedChoice* (Math.sqrt(A*A + D*D));
 	wAngle3 = Math.atan2(A,D) * 180.0/Math.PI;
     if (wAngle3 < 15.0)
@@ -191,7 +202,11 @@ public class R2Jesu_Drive {
         wAngle3 = wAngle3 - 180.0;
         wSpeed3 = -1.0 * wSpeed3;
     }
-
+/*         if (wAngle3 < 15.0)
+    {
+        wAngle3 = wAngle3 + 180.0;
+        wSpeed3 = wSpeed3 * -1.0;
+    } */
 	wSpeed4 = speedChoice*(Math.sqrt(A*A + C*C));
 	wAngle4 = Math.atan2(A,C) * 180.0/Math.PI;
     if (wAngle4 < 15.0)
@@ -204,7 +219,11 @@ public class R2Jesu_Drive {
         wAngle4 = wAngle4 - 180.0;
         wSpeed4 = -1.0 * wSpeed4;
     }
-
+/*      if (wAngle4 < 15.0)
+    {
+        wAngle4 = wAngle4 + 180.0;
+        wSpeed4 = -1.0 * wSpeed4;
+    }    */
 
 
 if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1 || Math.abs(z) > 0.1)
@@ -248,11 +267,12 @@ else
     m_DriveEncoder1.setPosition(0.0);
   }
 
-  public double driveAuto(double x, double y, double z) {
+  public double driveAuto(double x, double y, double z, double angle) {
     dX=x;
     dY=y;
     dZ=z;
-    this.drive(x, y, (ahrsDrive.getYaw() - 0.0) * -0.06, false);
+    dAngle = angle;
+    this.drive(x, y, (ahrsDrive.getYaw() - angle) * -0.06, false);
     this.driveMetrics();
     return Math.abs(m_DriveEncoder1.getPosition());
   }
@@ -299,6 +319,7 @@ else
     SmartDashboard.putNumber("Wheel 3 Speed", wSpeed3);
     SmartDashboard.putNumber("Wheel 4 Speed", wSpeed4);
     SmartDashboard.putNumber("Wheel 1 Position", m_DriveEncoder1.getPosition());
+    SmartDashboard.putNumber("the corrector thing", ((ahrsDrive.getYaw() - dAngle) * -0.06));
   }
 }
 
