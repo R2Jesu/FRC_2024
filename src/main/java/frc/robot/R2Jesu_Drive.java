@@ -166,11 +166,11 @@ public class R2Jesu_Drive {
         wAngle1 = wAngle1 - 180.0;
         wSpeed1 = -1.0 * wSpeed1;
     }
-  /*       if (wAngle1 < 15.0)
+         if (wAngle1 < 15.0)
     {
         wAngle1 = wAngle1 + 180;
         wSpeed1 = -1.0 * wSpeed1;
-    } */
+    } 
     System.out.println("wAngle1calculated " + wAngle1);
 
 	wSpeed2 = speedChoice *  (Math.sqrt(B*B + D*D));
@@ -185,11 +185,11 @@ public class R2Jesu_Drive {
         wAngle2 = wAngle2 - 180.0;
         wSpeed2 = -1.0 * wSpeed2;
     }
-    /* if (wAngle2 < 15.0)
+    if (wAngle2 < 15.0)
     {
         wAngle2 = wAngle2 + 180.0;
         wSpeed2 = wSpeed2 * -1.0;
-    } */
+    }
 	wSpeed3 = speedChoice* (Math.sqrt(A*A + D*D));
 	wAngle3 = Math.atan2(A,D) * 180.0/Math.PI;
     if (wAngle3 < 15.0)
@@ -202,11 +202,11 @@ public class R2Jesu_Drive {
         wAngle3 = wAngle3 - 180.0;
         wSpeed3 = -1.0 * wSpeed3;
     }
-/*         if (wAngle3 < 15.0)
+        if (wAngle3 < 15.0)
     {
         wAngle3 = wAngle3 + 180.0;
         wSpeed3 = wSpeed3 * -1.0;
-    } */
+    } 
 	wSpeed4 = speedChoice*(Math.sqrt(A*A + C*C));
 	wAngle4 = Math.atan2(A,C) * 180.0/Math.PI;
     if (wAngle4 < 15.0)
@@ -219,11 +219,11 @@ public class R2Jesu_Drive {
         wAngle4 = wAngle4 - 180.0;
         wSpeed4 = -1.0 * wSpeed4;
     }
-/*      if (wAngle4 < 15.0)
+      if (wAngle4 < 15.0)
     {
         wAngle4 = wAngle4 + 180.0;
         wSpeed4 = -1.0 * wSpeed4;
-    }    */
+    }  
 
 
 if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1 || Math.abs(z) > 0.1)
@@ -277,15 +277,25 @@ else
     return Math.abs(m_DriveEncoder1.getPosition());
   }
 
-  public double driveAutoOffCenter(double x, double y, double z) {
+  public double driveAutoOffCenter(double x, double y, double z, double angle, boolean goBack) {
     dX=x;
     dY=y;
     dZ=z;
-    if (ahrsDrive.getYaw() < 0)
-    {
-        x = x * -1.0;
+    double stickAngle;
+    if (angle < 0){
+        stickAngle = angle + 180;
+        stickAngle = 270 - stickAngle;
+    } else {
+        stickAngle = angle - 180;
+        stickAngle = Math.abs(stickAngle) - 90;
     }
-    this.drive(x, y, z, false);
+    double inputX = (Math.cos((stickAngle) * (Math.PI/180.0)) / 2.5);
+    double inputY = -1.0 * (Math.sin((stickAngle) * (Math.PI/180.0)) / 2.5);
+    if (goBack) {
+        inputX = inputX * -1.0;
+        inputY = inputY * -1.0;
+    }
+    this.drive(inputX, inputY, (ahrsDrive.getYaw() - angle) * -0.06, false);
     this.driveMetrics();
     return Math.abs(m_DriveEncoder1.getPosition());
   }
