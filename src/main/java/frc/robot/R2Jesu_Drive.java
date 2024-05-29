@@ -135,7 +135,6 @@ public class R2Jesu_Drive {
     inputAngle = Math.atan2(y, x) * 180.0/Math.PI;
     r = Math.sqrt((x*x) + (y*y));
     fieldOrientedAngle = ahrsDrive.getYaw() + inputAngle;
-    System.out.println("Field Oriented Angle" + fieldOrientedAngle);
     newX = r * (Math.cos(fieldOrientedAngle * Math.PI/180.0));
     newY = r * (Math.sin(fieldOrientedAngle * Math.PI/180.0));
     A = newY - z*(LENGTH/R);
@@ -150,12 +149,8 @@ public class R2Jesu_Drive {
     {
         speedChoice = fullSpeed;
     }
-    System.out.println("x " + x + " y " + y + " z " + z);
-    System.out.println("B " + B);
-    System.out.println("C " + C);
     wSpeed1 = speedChoice * (Math.sqrt(B*B + C*C));
-	wAngle1 = Math.atan2(B,C) * 180.0/Math.PI; 
-    System.out.println("wAngle1 " + wAngle1);
+	wAngle1 = Math.atan2(B,C) * 180.0/Math.PI;
     if (wAngle1 < 15.0)
     {
         wAngle1 = wAngle1 + 180;
@@ -166,12 +161,11 @@ public class R2Jesu_Drive {
         wAngle1 = wAngle1 - 180.0;
         wSpeed1 = -1.0 * wSpeed1;
     }
-         if (wAngle1 < 15.0)
+    if (wAngle1 < 15.0)
     {
         wAngle1 = wAngle1 + 180;
         wSpeed1 = -1.0 * wSpeed1;
     } 
-    System.out.println("wAngle1calculated " + wAngle1);
 
 	wSpeed2 = speedChoice *  (Math.sqrt(B*B + D*D));
 	wAngle2 = Math.atan2(B,D) * 180.0/Math.PI;
@@ -202,7 +196,7 @@ public class R2Jesu_Drive {
         wAngle3 = wAngle3 - 180.0;
         wSpeed3 = -1.0 * wSpeed3;
     }
-        if (wAngle3 < 15.0)
+    if (wAngle3 < 15.0)
     {
         wAngle3 = wAngle3 + 180.0;
         wSpeed3 = wSpeed3 * -1.0;
@@ -219,7 +213,7 @@ public class R2Jesu_Drive {
         wAngle4 = wAngle4 - 180.0;
         wSpeed4 = -1.0 * wSpeed4;
     }
-      if (wAngle4 < 15.0)
+    if (wAngle4 < 15.0)
     {
         wAngle4 = wAngle4 + 180.0;
         wSpeed4 = -1.0 * wSpeed4;
@@ -277,32 +271,23 @@ else
     return Math.abs(m_DriveEncoder1.getPosition());
   }
 
-  public double driveAutoOffCenter(double x, double y, double z, double angle, boolean goBack) {
+  public double driveAutoOffCenter(double x, double y, double z, double angle) {
     dX=x;
     dY=y;
     dZ=z;
-    double stickAngle;
-    if (angle < 0){
-        stickAngle = angle + 180;
-        stickAngle = 270 - stickAngle;
-    } else {
-        stickAngle = angle - 180;
-        stickAngle = Math.abs(stickAngle) - 90;
+
+    if (angle < 0)
+    {
+        x = x * -1.0;
     }
-    double inputX = (Math.cos((stickAngle) * (Math.PI/180.0)) / 2.5);
-    double inputY = -1.0 * (Math.sin((stickAngle) * (Math.PI/180.0)) / 2.5);
-    if (goBack) {
-        inputX = inputX * -1.0;
-        inputY = inputY * -1.0;
-    }
-    this.drive(inputX, inputY, (ahrsDrive.getYaw() - angle) * -0.06, false);
+    this.drive(x, y, z, false);
     this.driveMetrics();
     return Math.abs(m_DriveEncoder1.getPosition());
   }
 
   public boolean turnToAngle(double angle)
   {
-    this.drive(0, 0, (ahrsDrive.getYaw() - angle) * -0.028, false);
+    this.drive(0, 0, (ahrsDrive.getYaw() - angle) * -0.020, false);
     if ((ahrsDrive.getYaw() < angle + 3) && (ahrsDrive.getYaw() > angle - 3))
     {
         return true;

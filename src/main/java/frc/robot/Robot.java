@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
   R2Jesu_Align robotAlign = new R2Jesu_Align(robotDrive, robotLimelight, ahrs);
   R2Jesu_Shooter robotShooter = new R2Jesu_Shooter(robotLimelight);
   R2Jesu_Hanger robotHanger = new R2Jesu_Hanger();
+  private double outDist;
   
 
   /**
@@ -148,7 +149,7 @@ public class Robot extends TimedRobot {
           robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           robotDrive.zeroPosition();
           try {
-            Thread.sleep(200);
+            Thread.sleep(500);
           }
           catch (InterruptedException e)
           {
@@ -156,7 +157,7 @@ public class Robot extends TimedRobot {
           }
           //System.out.println("drive 72");
           while (robotDrive.driveAuto(0.0, 0.50, 0.0, 0.0) < 72 && RobotState.isAutonomous());
-           System.out.println("hello speaker");
+          System.out.println("hello speaker");
           robotDrive.drive(0.0, 0.0, 0.0, false);
           robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           robotShooter.shoot();
@@ -169,8 +170,8 @@ public class Robot extends TimedRobot {
           }
           robotDrive.zeroPosition();
           robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           runAuto = false;
-           System.out.println("end auto");
         }
         break;
       case kShootLeaveOffCenterAuto:
@@ -194,9 +195,9 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAutoOffCenter(0.30, 0.0, 0.0, autoAngle, false) < 22 && RobotState.isAutonomous());
+          while (robotDrive.driveAutoOffCenter(0.30, 0.0, 0.0, autoAngle) < 20 && RobotState.isAutonomous());
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, false);
+          //robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, false);
           while (!(robotDrive.turnToAngle(0.0)) && RobotState.isAutonomous());
           robotDrive.zeroPosition();
           try {
@@ -206,12 +207,20 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAuto(0.0, -0.45, 0.0, 0.0) < 70 && RobotState.isAutonomous()) {
+          while (robotDrive.driveAuto(0.0, -0.45, 0.0, 0.0) < 68 && RobotState.isAutonomous()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
-          robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, false);
+          // robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
+          // robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, false);
+           try {
+            Thread.sleep(200);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          //robotShooter.runShooter(m_Drivestick);
           runAuto = false;
         }
         break;
@@ -222,11 +231,13 @@ public class Robot extends TimedRobot {
           double autoAngle = robotDrive.getAngle();
           if (autoAngle < 0)
           {
-            autoAngle += 10;
+            autoAngle += 2;
+            outDist = 20.0;
           }
           else
           {
-            autoAngle -= 10;
+            autoAngle -= 2;
+            outDist = 12.0;
           }
           robotShooter.justShooter();
           try {
@@ -244,9 +255,8 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAutoOffCenter(0.40, 0.0, 0.0, autoAngle, false) < 22 && RobotState.isAutonomous());
+          while (robotDrive.driveAutoOffCenter(0.40, 0.0, 0.0, autoAngle) < outDist && RobotState.isAutonomous());
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, false);
           while (!(robotDrive.turnToAngle(0.0)) && RobotState.isAutonomous());
           robotDrive.zeroPosition();
           try {
@@ -256,14 +266,10 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          //System.out.println("drive 65");
           while (robotDrive.driveAuto(0.0, -0.50, 0.0, 0.0) < 75 && RobotState.isAutonomous()) {
               robotShooter.runShooter(m_Drivestick);
           }
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
-          //robotShooter.runShooter(m_Drivestick);
-          //robotDrive.drive(0.0, 0.0, 0.0, false);
           robotDrive.zeroPosition();
           try {
             Thread.sleep(200);
@@ -272,8 +278,9 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          //System.out.println("drive 58");
           while (robotDrive.driveAuto(0.0, 0.50, 0.0, 0.0) < 72 && RobotState.isAutonomous());
+          robotDrive.drive(0.0, 0.0, 0.0, false);
+          robotDrive.zeroPosition();
           try {
             Thread.sleep(200);
           }
@@ -281,12 +288,10 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          //System.out.println("turn to angle 2");
           robotShooter.justShooter();
-          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
+          
           while (!(robotDrive.turnToAngle(autoAngle)) && RobotState.isAutonomous());
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
           robotDrive.zeroPosition();
           try {
             Thread.sleep(200);
@@ -295,12 +300,17 @@ public class Robot extends TimedRobot {
           {
             System.out.println("Sleep");
           }
-          while (robotDrive.driveAutoOffCenter(-0.40, 0.0, 0.0, autoAngle, true) < 22.0 && RobotState.isAutonomous());
+          while (robotDrive.driveAutoOffCenter(-0.40, 0.0, 0.0, autoAngle) < (outDist - 1) && RobotState.isAutonomous());
           robotDrive.drive(0.0, 0.0, 0.0, false);
-          robotDrive.driveAuto(0.0, 0.0, 0.0, 0.0);
-          robotDrive.driveAutoOffCenter(0.0, 0.0, 0.0, 0.0, true);
-          //robotDrive.drive(0.0, 0.0, 0.0, false);
           robotShooter.shoot();
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e)
+          {
+            System.out.println("Sleep");
+          }
+          //robotShooter.runShooter(m_Drivestick);
           runAuto = false;
         }
         break;
